@@ -29,7 +29,6 @@ storage_config:
     active_index_directory: /tmp/loki/index
     cache_location: /tmp/loki/boltdb-cache
     shared_store: filesystem
-
   filesystem:
     directory: /tmp/loki/chunks
 
