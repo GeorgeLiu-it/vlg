@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  vector:
+    image: timberio/vector:latest-debian
+    volumes:
+      - ./vector.toml:/etc/vector/vector.toml:ro
+      - /var/log:/var/log:ro # Example: read host logs
+    depends_on:
+      - loki
+
+volumes:
+  grafana-data:
